@@ -23,14 +23,14 @@ jobs:
     steps:
       - if: ${{ matrix.browser == 'firefox' }}
         id: setup-firefox
-        name: Set up ${{ matrix.browser }}
+        name: Set up Firefox
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: latest
 
       - if: ${{ matrix.browser == 'chrome' }}
         id: setup-chrome
-        name: Set up ${{ matrix.browser }}
+        name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
@@ -38,7 +38,7 @@ jobs:
 
       - if: ${{ matrix.browser == 'edge' }}
         id: setup-edge
-        name: Set up ${{ matrix.browser }}
+        name: Set up Edge
         uses: browser-actions/setup-edge@v1
         with:
           edge-version: stable
