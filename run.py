@@ -4,22 +4,33 @@ import base64
 import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 
 
 def main():
     html_page = ""
-    browser = os.environ.get('BROWSER')
+    browser = os.environ.get("BROWSER")
 
     with open("./test.html", "r", encoding="utf-8") as fp:
         html_page = fp.read()
         html_page = base64.b64encode(html_page.encode("utf-8")).decode("utf-8")
 
     if browser == "firefox":
-        driver = webdriver.Firefox()
+        firefox_options = FirefoxOptions()
+        firefox_options.add_argument("--headless")
+        driver = webdriver.Firefox(options=firefox_options)
     elif browser == "chrome":
-        driver = webdriver.Chrome()
+        chrome_options = ChromeOptions()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        driver = webdriver.Chrome(options=chrome_options)
     elif browser == "edge":
-        driver = webdriver.Edge()
+        edge_options = EdgeOptions()
+        edge_options.add_argument("--headless")
+        driver = webdriver.Edge(options=edge_options)
     elif browser == "safari":
         driver = webdriver.Safari()
     else:

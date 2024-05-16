@@ -22,12 +22,14 @@ jobs:
 
     steps:
       - if: ${{ matrix.browser == 'firefox' }}
+        id: setup-firefox
         name: Set up ${{ matrix.browser }}
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: latest
 
       - if: ${{ matrix.browser == 'chrome' }}
+        id: setup-chrome
         name: Set up ${{ matrix.browser }}
         uses: browser-actions/setup-chrome@v1
         with:
@@ -40,9 +42,18 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Fix paths
+        run: |
+          if [[ -n "${{ steps.setup-chrome.outputs.chrome-path }}" ]]; then
+            echo "${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_PATH;
+          elif [[ -n "${{ steps.setup-firefox.outputs.firefox-path }}" ]]; then
+            echo "${{ steps.setup-firefox.outputs.firefox-path }}" >> $GITHUB_PATH;
+          fi
+
       - name: Run tests
         run: |
-          pip install selenium==4.21.0
+          env
+          pip install -q selenium==4.21.0
           python run.py
         env:
           BROWSER: ${{ matrix.browser }}
