@@ -17,7 +17,9 @@
         "audio/webm;codecs=pcm",
       ];
       var formatMap = {
-        "userAgent": navigator.userAgent,
+        "_meta": {
+          "userAgent": navigator.userAgent,
+        },
       };
 
       formats.forEach(function (format) {

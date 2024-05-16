@@ -15,8 +15,8 @@ jobs:
             os: ubuntu-latest
           - browser: chrome
             os: ubuntu-latest
-          # - browser: edge
-          #   os: ubuntu-latest
+          - browser: edge
+            os: ubuntu-latest
           # - browser: safari
           #   os: macos-latest
 
@@ -36,24 +36,38 @@ jobs:
           chrome-version: stable
           install-dependencies: true
 
+      - if: ${{ matrix.browser == 'edge' }}
+        id: setup-edge
+        name: Set up ${{ matrix.browser }}
+        uses: browser-actions/setup-edge@v1
+        with:
+          edge-version: stable
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Fix paths
-        run: |
-          if [[ -n "${{ steps.setup-chrome.outputs.chrome-path }}" ]]; then
-            echo "${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_PATH;
-          elif [[ -n "${{ steps.setup-firefox.outputs.firefox-path }}" ]]; then
-            echo "${{ steps.setup-firefox.outputs.firefox-path }}" >> $GITHUB_PATH;
-          fi
+      # - name: Fix paths
+      #   run: |
+      #     if [[ -n "${{ steps.setup-chrome.outputs.chrome-path }}" ]]; then
+      #       echo "${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_PATH;
+      #     elif [[ -n "${{ steps.setup-firefox.outputs.firefox-path }}" ]]; then
+      #       echo "${{ steps.setup-firefox.outputs.firefox-path }}" >> $GITHUB_PATH;
+      #     fi
 
       - name: Run tests
         run: |
-          env
           pip install -q selenium==4.21.0
+          echo "Running..."
           python run.py
         env:
           BROWSER: ${{ matrix.browser }}
+
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.browser }}-data
+          path: output.json
+          retention-days: 7

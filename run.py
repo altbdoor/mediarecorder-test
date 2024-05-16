@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import base64
+import json
 import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -42,12 +43,15 @@ def main():
     driver.get("data:text/html;base64," + html_page)
     pre_element = driver.find_element(By.TAG_NAME, "pre")
 
-    print(f"Browser: {browser_name}")
-    print(f"Version: {browser_version}")
-    print(pre_element.text)
+    print(f"Browser name: {browser_name}")
+    print(f"Browser version: {browser_version}")
+
+    data = json.loads(pre_element.text)
+    data["_meta"]["browser_name"] = browser_name
+    data["_meta"]["browser_version"] = browser_version
 
     with open("./output.json", "w", encoding="utf-8") as fp:
-        fp.write(pre_element.text)
+        json.dump(data, fp, indent=4)
 
     driver.quit()
 
