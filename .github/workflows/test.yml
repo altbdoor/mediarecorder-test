@@ -17,8 +17,8 @@ jobs:
             os: ubuntu-latest
           - browser: edge
             os: ubuntu-latest
-          # - browser: safari
-          #   os: macos-latest
+          - browser: safari
+            os: macos-latest
 
     steps:
       - if: ${{ matrix.browser == 'firefox' }}
@@ -62,8 +62,11 @@ jobs:
           pip install -q selenium==4.21.0
           echo "Running..."
           python run.py
+          echo "Done"
+          cat output.json
         env:
           BROWSER: ${{ matrix.browser }}
+        shell: bash
 
       - name: Artifact
         uses: actions/upload-artifact@v4
