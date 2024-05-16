@@ -1,0 +1,48 @@
+name: MediaRecorder test
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  parallel-tests:
+    name: ${{ matrix.browser }} ${{ matrix.browser-version }} test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - browser: firefox
+            os: ubuntu-latest
+          - browser: chrome
+            os: ubuntu-latest
+          # - browser: edge
+          #   os: ubuntu-latest
+          # - browser: safari
+          #   os: macos-latest
+
+    steps:
+      - if: ${{ matrix.browser == 'firefox' }}
+        name: Set up ${{ matrix.browser }}
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
+      - if: ${{ matrix.browser == 'chrome' }}
+        name: Set up ${{ matrix.browser }}
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-dependencies: true
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run tests
+        run: |
+          pip install selenium==4.21.0
+          python run.py
+        env:
+          BROWSER: ${{ matrix.browser }}

@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <script>
+      var formats = [
+        "video/webm",
+        "video/webm;codecs=vp8",
+        "video/webm;codecs=vp9",
+        "video/webm;codecs=vp8.0",
+        "video/webm;codecs=vp9.0",
+        "video/webm;codecs=vp8,opus",
+        "video/webm;codecs=vp8,pcm",
+        "video/WEBM;codecs=VP8,OPUS",
+        "video/webm;codecs=vp9,opus",
+        "video/webm;codecs=vp8,vp9,opus",
+        "audio/webm",
+        "audio/webm;codecs=opus",
+        "audio/webm;codecs=pcm",
+      ];
+      var formatMap = {
+        "userAgent": navigator.userAgent,
+      };
+
+      formats.forEach(function (format) {
+        formatMap[format] = MediaRecorder.isTypeSupported(format);
+      });
+      document.write("<pre>" + JSON.stringify(formatMap, null, 4) + "</pre>");
+    </script>
+  </body>
+</html>
