@@ -44,8 +44,8 @@ def main():
     pre_element = driver.find_element(By.TAG_NAME, "pre")
 
     data = json.loads(pre_element.text)
-    data["_meta"]["browser_name"] = browser_name
-    data["_meta"]["browser_version"] = browser_version
+    data["_meta"]["browserName"] = browser_name
+    data["_meta"]["browserVersion"] = browser_version
 
     with open("./info.txt", "w", encoding="utf-8") as fp:
         fp.write(f"browser-name={browser_name}\n".lower())
