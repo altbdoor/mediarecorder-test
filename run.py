@@ -43,12 +43,13 @@ def main():
     driver.get("data:text/html;base64," + html_page)
     pre_element = driver.find_element(By.TAG_NAME, "pre")
 
-    print(f"Browser name: {browser_name}")
-    print(f"Browser version: {browser_version}")
-
     data = json.loads(pre_element.text)
     data["_meta"]["browser_name"] = browser_name
     data["_meta"]["browser_version"] = browser_version
+
+    with open("./info.txt", "w", encoding="utf-8") as fp:
+        fp.write(f"browser-name={browser_name}\n".lower())
+        fp.write(f"browser-version={browser_version}\n".lower())
 
     with open("./output.json", "w", encoding="utf-8") as fp:
         json.dump(data, fp, indent=4)

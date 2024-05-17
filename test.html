@@ -1,33 +1,31 @@
-<html>
-  <body>
-    <script>
-      var formats = [
-        "video/webm",
-        "video/mp4",
-        "video/webm;codecs=vp8",
-        "video/webm;codecs=vp9",
-        "video/webm;codecs=vp8.0",
-        "video/webm;codecs=vp9.0",
-        "video/webm;codecs=vp8,opus",
-        "video/webm;codecs=vp8,pcm",
-        "video/WEBM;codecs=VP8,OPUS",
-        "video/webm;codecs=vp9,opus",
-        "video/webm;codecs=vp8,vp9,opus",
-        "audio/webm",
-        "audio/mp4",
-        "audio/webm;codecs=opus",
-        "audio/webm;codecs=pcm",
-      ];
-      var formatMap = {
-        _meta: {
-          userAgent: navigator.userAgent,
-        },
-      };
+<!DOCTYPE html>
+<script>
+  var formats = [
+"video/webm",
+"video/mp4",
+"video/webm;codecs=vp8",
+"video/webm;codecs=vp9",
+"video/webm;codecs=vp8.0",
+"video/webm;codecs=vp9.0",
+"video/webm;codecs=vp8,opus",
+"video/webm;codecs=vp8,pcm",
+"video/WEBM;codecs=VP8,OPUS",
+"video/webm;codecs=vp9,opus",
+"video/webm;codecs=vp8,vp9,opus",
+"audio/webm",
+"audio/mp3",
+"audio/mp4",
+"audio/webm;codecs=opus",
+"audio/webm;codecs=pcm",
+  ];
+  var formatMap = {
+    _meta: {
+      userAgent: navigator.userAgent,
+    },
+  };
 
-      formats.forEach(function (format) {
-        formatMap[format] = MediaRecorder.isTypeSupported(format);
-      });
-      document.write("<pre>" + JSON.stringify(formatMap, null, 4) + "</pre>");
-    </script>
-  </body>
-</html>
+  formats.forEach(function (format) {
+    formatMap[format] = MediaRecorder.isTypeSupported(format);
+  });
+  document.write("<pre>" + JSON.stringify(formatMap, null, 4) + "</pre>");
+</script>

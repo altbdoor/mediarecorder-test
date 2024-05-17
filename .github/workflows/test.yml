@@ -12,12 +12,19 @@ jobs:
       matrix:
         include:
           - browser: firefox
+            version: latest
             os: ubuntu-latest
+
           - browser: chrome
+            version: stable
             os: ubuntu-latest
+
           - browser: edge
+            version: stable
             os: ubuntu-latest
+
           - browser: safari
+            version: stable
             os: macos-latest
 
     steps:
@@ -26,14 +33,14 @@ jobs:
         name: Set up Firefox
         uses: browser-actions/setup-firefox@v1
         with:
-          firefox-version: latest
+          firefox-version: ${{ matrix.version }}
 
       - if: ${{ matrix.browser == 'chrome' }}
         id: setup-chrome
         name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: stable
+          chrome-version: ${{ matrix.version }}
           install-dependencies: true
 
       - if: ${{ matrix.browser == 'edge' }}
@@ -41,7 +48,7 @@ jobs:
         name: Set up Edge
         uses: browser-actions/setup-edge@v1
         with:
-          edge-version: stable
+          edge-version: ${{ matrix.version }}
 
       - uses: actions/checkout@v4
 
@@ -53,16 +60,20 @@ jobs:
       #   run: |
       #     if [[ -n "${{ steps.setup-chrome.outputs.chrome-path }}" ]]; then
       #       echo "${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_PATH;
-      #     elif [[ -n "${{ steps.setup-firefox.outputs.firefox-path }}" ]]; then
-      #       echo "${{ steps.setup-firefox.outputs.firefox-path }}" >> $GITHUB_PATH;
       #     fi
 
       - name: Run tests
+        id: run-test
         run: |
-          pip install -q selenium==4.21.0
+          pip install -q 'selenium==4.*'
           echo "Running..."
           python run.py
           echo "Done"
+
+          cat info.txt >> "$GITHUB_OUTPUT"
+          echo ""
+          cat info.txt
+          echo ""
           cat output.json
         env:
           BROWSER: ${{ matrix.browser }}
@@ -71,6 +82,6 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.browser }}-data
+          name: ${{ steps.run-test.outputs.browser-name }}-${{ steps.run-test.outputs.browser-version }}-data
           path: output.json
           retention-days: 7
