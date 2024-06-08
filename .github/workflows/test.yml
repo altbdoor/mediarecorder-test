@@ -1,8 +1,19 @@
 name: MediaRecorder test
-
 on:
   push:
     branches: [master]
+  schedule:
+    # schedule to run every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   parallel-tests:
@@ -63,11 +74,11 @@ jobs:
       #     fi
 
       - name: Run tests
-        id: run-test
+        id: run-tests
         run: |
           pip install -q 'selenium==4.*'
           echo "Running..."
-          python run.py
+          python run-tests.py
           echo "Done"
 
           cat info.txt >> "$GITHUB_OUTPUT"
@@ -81,21 +92,36 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.run-test.outputs.browser-name }}-${{ steps.run-test.outputs.browser-version }}-data
+          name: ${{ steps.run-tests.outputs.browser-name }}-${{ steps.run-tests.outputs.browser-version }}-data
           path: output.json
           retention-days: 7
 
   aggregate-results:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     needs: parallel-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - uses: actions/download-artifact@v4
         with:
           pattern: '*-data'
-          path: artifacts/
+          path: dist/
 
       - name: Process test results
         run: |
-          ls -R artifacts
+          python compile-results.py
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./dist"
+
+      - uses: actions/deploy-pages@v4
+        id: deployment
