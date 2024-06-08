@@ -79,9 +79,23 @@ jobs:
           BROWSER: ${{ matrix.browser }}
         shell: bash
 
-      - name: Artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.run-test.outputs.browser-name }}-${{ steps.run-test.outputs.browser-version }}-data
           path: output.json
           retention-days: 7
+
+  aggregate-results:
+    needs: parallel-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: '*.json'
+          path: artifacts/
+
+      - name: Process test results
+        run: |
+          ls -R artifacts
