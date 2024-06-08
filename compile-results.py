@@ -1,6 +1,7 @@
 from datetime import datetime
 import glob
 import json
+import os
 
 
 def main():
@@ -9,6 +10,13 @@ def main():
     for file_path in glob.glob("./dist/*/output.json"):
         with open(file_path, "r", encoding="utf-8") as fp:
             data = json.load(fp)
+
+            json_path = os.path.normpath(file_path)
+            json_path = json_path.split(os.sep)[1:]
+            json_path = "/".join(json_path)
+
+            data["_meta"]["jsonPath"] = json_path
+
             combined_data.append(data)
 
     if len(combined_data) == 0:
@@ -20,7 +28,13 @@ def main():
         browser_name = entry["_meta"]["browserName"]
         browser_version = entry["_meta"]["browserVersion"]
 
-        browser_names.append(f"<td>{browser_name} {browser_version}</td>")
+        browser_names.append(
+            "<td>"
+            f'<a href="./{entry['_meta']['jsonPath']}">'
+            f"{browser_name} {browser_version}"
+            "</a>"
+            "</td>"
+        )
 
     # get all the formats
     row_keys: list[str] = [key for key in combined_data[0].keys() if key != "_meta"]
@@ -44,18 +58,21 @@ def main():
 
     # write to html
     with open("./dist/index.html", "w", encoding="utf-8") as fp:
-        fp.write("<!DOCTYPE html>")
-        fp.write('<html style="font-size: 16px;">')
-        fp.write("<body>")
-
         today = datetime.today().isoformat()
-        fp.write(f'<p>Updated on: <time datetime="{today}">{today}</time></p>')
 
-        fp.write('<table border="1">')
-        fp.write(html_rows)
-        fp.write("</table>")
-        fp.write("</body>")
-        fp.write("</html>")
+        fp.write(
+            "<!DOCTYPE html>"
+            '<html style="font-size: 16px;">'
+            "<body>"
+            "<h1>MediaRecorder test</h1>"
+            f'<p>GitHub repository: <a href="https://altbdoor.github.io/mediarecorder-test/">mediarecorder-test</a></p>'
+            f'<p>Updated on: <time datetime="{today}">{today}</time></p>'
+            '<table border="1">'
+            f"{html_rows}"
+            "</table>"
+            "</body>"
+            "</html>"
+        )
 
 
 if __name__ == "__main__":
