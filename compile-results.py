@@ -65,7 +65,7 @@ def main():
             '<html style="font-size: 16px;">'
             "<body>"
             "<h1>MediaRecorder test</h1>"
-            f'<p>GitHub repository: <a href="https://altbdoor.github.io/mediarecorder-test/">mediarecorder-test</a></p>'
+            f'<p>GitHub repository: <a href="https://github.com/altbdoor/mediarecorder-test">mediarecorder-test</a></p>'
             f'<p>Updated on: <time datetime="{today}">{today}</time></p>'
             '<table border="1">'
             f"{html_rows}"
