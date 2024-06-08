@@ -27,10 +27,11 @@ def main():
     for entry in combined_data:
         browser_name = entry["_meta"]["browserName"]
         browser_version = entry["_meta"]["browserVersion"]
+        json_path = entry["_meta"]["jsonPath"]
 
         browser_names.append(
             "<td>"
-            f'<a href="./{entry['_meta']['jsonPath']}">'
+            f'<a href="./{json_path}">'
             f"{browser_name} {browser_version}"
             "</a>"
             "</td>"
