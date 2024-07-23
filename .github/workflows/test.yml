@@ -30,9 +30,10 @@ jobs:
             version: stable
             os: ubuntu-latest
 
-          - browser: edge
-            version: stable
-            os: ubuntu-latest
+          # disable edge until its fixed
+          # - browser: edge
+          #   version: stable
+          #   os: ubuntu-latest
 
           - browser: safari
             version: stable
