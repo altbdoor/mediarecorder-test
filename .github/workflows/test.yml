@@ -32,7 +32,7 @@ jobs:
 
           - browser: edge
             version: stable
-            os: macos-latest  # todo: check setup-edge, broken on ubuntu
+            os: ubuntu-latest
 
           - browser: safari
             version: stable
