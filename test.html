@@ -6,20 +6,10 @@
     "ogg",
     "mp3",
     "mp4",
-    "x-matroska",
-    "3gpp",
-    "3gpp2",
-    "3gp2",
-    "quicktime",
     "mpeg",
     "aac",
     "flac",
-    "x-flac",
-    "wave",
     "wav",
-    "x-wav",
-    "x-pn-wav",
-    "not-supported",
   ];
   var CODECS = [
     "vp9",
@@ -38,15 +28,6 @@
     "aac",
     "mpeg",
     "mp4a",
-    "rtx",
-    "red",
-    "ulpfec",
-    "g722",
-    "pcmu",
-    "pcma",
-    "cn",
-    "telephone-event",
-    "not-supported",
   ];
 
   var formats = [
@@ -61,17 +42,6 @@
           MEDIATYPES.flatMap((mediaType) => [
             `${mediaType}/${ext};codecs=${codec}`,
           ]),
-        ),
-      ),
-    ),
-    ...new Set(
-      CONTAINERS.flatMap((ext) =>
-        CODECS.flatMap((codec1) =>
-          CODECS.flatMap((codec2) =>
-            MEDIATYPES.flatMap((mediaType) => [
-              `${mediaType}/${ext};codecs="${codec1}, ${codec2}"`,
-            ]),
-          ),
         ),
       ),
     ),
