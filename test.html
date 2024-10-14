@@ -1,23 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <script>
-  var formats = [
-"video/webm",
-"video/mp4",
-"video/webm;codecs=vp8",
-"video/webm;codecs=vp9",
-"video/webm;codecs=vp8.0",
-"video/webm;codecs=vp9.0",
-"video/webm;codecs=vp8,opus",
-"video/webm;codecs=vp8,pcm",
-"video/WEBM;codecs=VP8,OPUS",
-"video/webm;codecs=vp9,opus",
-"video/webm;codecs=vp8,vp9,opus",
-"audio/webm",
-"audio/mp3",
-"audio/mp4",
-"audio/webm;codecs=opus",
-"audio/webm;codecs=pcm",
+  var MEDIATYPES = ["audio", "video"];
+  var CONTAINERS = [
+    "webm",
+    "ogg",
+    "mp3",
+    "mp4",
+    "x-matroska",
+    "3gpp",
+    "3gpp2",
+    "3gp2",
+    "quicktime",
+    "mpeg",
+    "aac",
+    "flac",
+    "x-flac",
+    "wave",
+    "wav",
+    "x-wav",
+    "x-pn-wav",
+    "not-supported",
   ];
+  var CODECS = [
+    "vp9",
+    "vp9.0",
+    "vp8",
+    "vp8.0",
+    "avc1",
+    "av1",
+    "h265",
+    "h.265",
+    "h264",
+    "h.264",
+    "opus",
+    "vorbis",
+    "pcm",
+    "aac",
+    "mpeg",
+    "mp4a",
+    "rtx",
+    "red",
+    "ulpfec",
+    "g722",
+    "pcmu",
+    "pcma",
+    "cn",
+    "telephone-event",
+    "not-supported",
+  ];
+
+  var formats = [
+    ...new Set(
+      CONTAINERS.flatMap((ext) =>
+        MEDIATYPES.flatMap((mediaType) => [`${mediaType}/${ext}`]),
+      ),
+    ),
+    ...new Set(
+      CONTAINERS.flatMap((ext) =>
+        CODECS.flatMap((codec) =>
+          MEDIATYPES.flatMap((mediaType) => [
+            `${mediaType}/${ext};codecs=${codec}`,
+          ]),
+        ),
+      ),
+    ),
+    ...new Set(
+      CONTAINERS.flatMap((ext) =>
+        CODECS.flatMap((codec1) =>
+          CODECS.flatMap((codec2) =>
+            MEDIATYPES.flatMap((mediaType) => [
+              `${mediaType}/${ext};codecs="${codec1}, ${codec2}"`,
+            ]),
+          ),
+        ),
+      ),
+    ),
+  ];
+
   var formatMap = {
     _meta: {
       userAgent: navigator.userAgent,
