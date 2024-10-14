@@ -47,13 +47,6 @@ jobs:
           firefox-version: ${{ matrix.version }}
 
       - if: ${{ matrix.browser == 'chrome' }}
-        id: deps-chrome
-        name: Install Chrome deps
-        run: |
-          sudo apt-get install --yes --no-install-recommends \
-            libglib2.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libgbm1 libnss3 libasound2 xvfb fonts-liberation xdg-utils
-
-      - if: ${{ matrix.browser == 'chrome' }}
         id: setup-chrome
         name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
